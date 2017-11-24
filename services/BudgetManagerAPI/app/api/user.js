@@ -17,6 +17,7 @@ api.setup = (User) => (req, res) => {
 
 api.index = (User, BudgetToken) => (req, res) => {
   const token = BudgetToken;
+  console.log('debugging token...', token);
   if (token) {
     User.find({}, (error, users) => {
       if (error) throw error;
