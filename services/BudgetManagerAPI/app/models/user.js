@@ -14,7 +14,7 @@ const Schema = mongoose.Schema({
     required: true,
   },
 
-  clients: [{}]
+  // clients: [{}]
 });
 
 Schema.pre('save', function(next) {
