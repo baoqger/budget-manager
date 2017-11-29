@@ -22,6 +22,7 @@ api.store = (User, Client, Token) => (req, res) => {
 
 api.getAll = (User, Client, Token) => (req, res) => {
   if (Token) {
+    console.log('debugging...', req.query.user_id)
     Client.find({ user_id: req.query.user_id }, (error, client) => {
       if (error) return res.status(400).json(error);
       res.status(200).json(client);

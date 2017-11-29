@@ -1,10 +1,16 @@
 <template>
-  <section class="l-budget-body">
-    <div class="md-budget" v-if="budgets != null" v-for="budget in budgets">
-      <div class="md-budget-info white-text">{{ budget.client }}</div>
-      <div class="md-budget-info white-text">{{ budget.title }}</div>
-      <div class="md-budget-info white-text">{{ budget.state }}</div>
-      <div class="l-budget-actions">
+  <section class="l-list-body">
+    <div class="md-list-item"
+      v-if="data != null"
+      v-for="item in data">
+
+      <div :class="budgetsVisible ? 'md-budget-info white--text' : 'md-client-info white--text'"
+        v-for="info in item"
+        v-if="info != item._id">
+        {{ info }}
+      </div>
+
+      <div :class="budgetsVisible ? 'l-budget-actions white--text' : 'l-client-actions white--text'">
         <v-btn small flat color="light-blue lighten-l">
           <v-icon small>visibility</v-icon>
         </v-btn>
@@ -20,17 +26,17 @@
 </template>
 <script>
   export default {
-    props: ['budgets']
+    props: ['data', 'budgetsVisible']
   }
 </script>
 <style lang="scss">
   @import "./../../assets/styles";
 
-  .l-budget-body {
+  .l-list-body {
     display: flex;
     flex-direction: column;
 
-    .md-budget {
+    .md-list-item {
       width: 100%;
       display: flex;
       flex-direction: column;
@@ -65,6 +71,15 @@
         }
       }
 
+      .md-client-info {
+        @extend .md-budget-info;
+        background-color: rgba(102, 187, 106, 0.45)!important;
+
+        &:nth-of-type(2) {
+          text-transform: none;
+        }
+      }
+
       .l-budget-actions {
         flex-basis: 25%;
         display: flex;
@@ -77,6 +92,11 @@
           min-width: 45px !important;
           margin: 0 5px !important;
         }
+      }
+
+      .l-client-actions {
+        @extend .l-budget-actions;
+        background-color: rgba(102, 187, 106, 0.45)!important;
       }
     }
   }

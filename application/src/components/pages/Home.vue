@@ -1,43 +1,64 @@
 <template>
   <main class="l-home-pages">
-    <app-header></app-header>
+    <app-header
+      :budgetsVisible="budgetsVisible"
+      @toggleVisibleData="budgetsVisible = !budgetsVisible"></app-header>
 
     <div class="l-home">
       <h4 class="white--text text-xs-center my-0">
         Focus Budget Manager
       </h4>
 
-      <budget-list>
-        <budget-list-header slot="budget-list-header"></budget-list-header>
-        <budget-list-body slot="budget-list-body" :budgets="budgets"></budget-list-body>
-      </budget-list>
+      <list>
+        <list-header slot="list-header" :headers="budgetsVisible ? budgetHeaders : clientHeaders"></list-header>
+        <list-body
+          slot="list-body"
+          :budgetsVisible="budgetsVisible"
+          :data="budgetsVisible ?  budgets : clients">
+        </list-body>
+      </list>
     </div>
+    <v-snackbar
+      :timeout="timeout"
+      bottom="bottom"
+      color="red lighten-l"
+      v-model="snackbar">
+      {{ message }}
+    </v-snackbar>
   </main>
 </template>
 <script>
   import Axios from 'axios'
   import Authentication from '@/components/pages/Authentication'
   import AppHeader from '@/components/Header'
-  import BudgetList from './../Budget/BudgetList'
-  import BudgetListHeader from './../Budget/BudgetListHeader'
-  import BudgetListBody from './../Budget/BudgetListBody'
+  import List from './../List/List'
+  import ListHeader from './../List/ListHeader'
+  import ListBody from './../List/ListBody'
 
   const BudgetManagerAPI = `http://${window.location.hostname}:3001`
 
   export default {
     components: {
       'app-header': AppHeader,
-      'budget-list': BudgetList,
-      'budget-list-header': BudgetListHeader,
-      'budget-list-body': BudgetListBody
+      'list': List,
+      'list-header': ListHeader,
+      'list-body': ListBody
     },
     data () {
       return {
-        budgets: []
+        budgets: [],
+        clients: [],
+        budgetHeaders: ['Client', 'Title', 'Status', 'Actions'],
+        clientHeaders: ['Client', 'Email', 'Phone', 'Actions'],
+        budgetsVisible: true,
+        snackbar: false,
+        timeout: 60000,
+        message: ''
       }
     },
     mounted () {
       this.getAllBudgets()
+      this.getAllClients()
     },
     methods: {
       getAllBudgets (context) {
@@ -46,7 +67,34 @@
             'Authorization': Authentication.getAuthenticationHeader(this)
           },
           params: { user_id: this.$cookie.get('user_id') }
-        }).then(({data}) => (this.budgets = data))
+        }).then(({data}) => {
+          this.budgets = this.dataParser(data, '_id', 'client', 'title', 'state')
+        }).catch(error => {
+          this.snackbar = true
+          this.message = error.message
+        })
+      },
+      getAllClients () {
+        Axios.get(`${BudgetManagerAPI}/api/v1/client`, {
+          headers: {
+            'Authorization': Authentication.getAuthenticationHeader(this)
+          },
+          params: { user_id: this.$cookie.get('user_id') }
+        }).then(({data}) => {
+          this.clients = this.dataParser(data, '_id', 'client', 'email', 'phone')
+        }).catch(error => {
+          this.snackbar = true
+          this.message = error.message
+        })
+      },
+      dataParser (targetArray, ...options) {
+        let parsedData = []
+        targetArray.forEach(item => {
+          let parsedItem = {}
+          options.forEach(option => (parsedItem[option] = item[option]))
+          parsedData.push(parsedItem)
+        })
+        return parsedData
       }
     }
   }

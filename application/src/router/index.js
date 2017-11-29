@@ -22,9 +22,6 @@ const router = new Router({
         default: Home
         // header: Header,
         // budgetList: BudgetList
-      },
-      meta: {
-        requireAuth: true
       }
     },
     {
@@ -36,7 +33,7 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.requireAuth) {
+  if (to.path !== '/login') {
     if (Auth.default.user.authenticated) {
       next()
     } else {
