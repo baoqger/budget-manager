@@ -4,7 +4,7 @@ import router from '@/router'
 const BudgetManagerAPI = `http://${window.location.hostname}:3001`
 
 export default {
-  user: { authenticated: false },
+  user: { authenticated1: false },
 
   authenticate (context, credentials, redirect) {
     Axios.post(`${BudgetManagerAPI}/api/v1/auth`, credentials)
@@ -41,7 +41,7 @@ export default {
     if (redirect) router.push(redirect)
   },
   checkAuthentication () {
-    const token = document.cookie
+    const token = document.cookie.token
     this.user.authenticated = !!token
   },
 
