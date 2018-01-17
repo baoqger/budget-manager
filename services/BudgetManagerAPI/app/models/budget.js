@@ -30,7 +30,10 @@ const Schema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
-
+  description: {
+    type: String,
+    required: true
+  },
   items: [{}]
 });
 
