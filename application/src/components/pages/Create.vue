@@ -26,21 +26,21 @@
 </template>
 
 <script>
-  import BudgetCreation from './../Creation/BudgetCreation';
-  import ClientCreation from './../Creation/ClientCreation';
-  import BudgetEdit from './../Creation/BudgetEdit';
-  import ClientEdit from './../Creation/ClientEdit';
+  import BudgetCreation from './../Creation/BudgetCreation'
+  import ClientCreation from './../Creation/ClientCreation'
+  import BudgetEdit from './../Creation/BudgetEdit'
+  import ClientEdit from './../Creation/ClientEdit'
 
   export default {
     props: [
-      'budgetCration', 'clients', 'saveBudget', 'saveClient', 'budget', 'client',
+      'budgetCreation', 'clients', 'saveBudget', 'saveClient', 'budget', 'client',
       'updateClient', 'fixClientNameAndUpdate', 'editPage', 'budgetEdit'
     ],
     components: {
       'budget-creation': BudgetCreation,
       'client-creation': ClientCreation,
       'budget-edit': BudgetEdit,
-      'client-edit': ClientEdit,
+      'client-edit': ClientEdit
     }
   }
 </script>

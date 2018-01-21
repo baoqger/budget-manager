@@ -10,7 +10,7 @@ api.store = (User, Budget, Client, Token) => (req, res) => {
       if (client) {
         const budget = new Budget({
           client_id: req.body.client,
-          user_id: req.body.user_id,
+          user_id: req.query.user_id,
           client: client.name,
           state: req.body.state,
           description: req.body.description,
@@ -33,9 +33,11 @@ api.store = (User, Budget, Client, Token) => (req, res) => {
 }
 
 api.getAll = (User, Budget, Token) => (req, res) => {
+  console.log('debugging getAll...', req.query.user_id);
   if (Token) {
     Budget.find({ user_id: req.query.user_id }, (error, budget) => {
       if (error) return res.status(400).json(error);
+      console.log(budget);
       res.status(200).json(budget);
       return true;
     })
@@ -45,6 +47,7 @@ api.getAll = (User, Budget, Token) => (req, res) => {
 }
 
 api.getAllFromClient = (User, Budget, Token) => (req, res) => {
+  console.log('debugging getAllFromClient...');
   if (Token) {
     Budget.find({ client_id: req.query.client_id }, (error, budget) => {
       if (error) return res.status(400).json(error);
@@ -100,7 +103,7 @@ api.getByState = (User, Budget, Client, Token) => (req, res) => {
       if (error) res.status(400).json(error);
 
       if (user) {
-        Budget.find({ status: req.query.state }, (error, budget) => {
+        Budget.find({ state: req.query.state, user_id: req.query.user_id }, (error, budget) => {
           console.log(budget);
           if (error) res.status(400).json(error);
           res.status(200).json(budget);
