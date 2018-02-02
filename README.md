@@ -4,6 +4,8 @@ vue.js + node.js web app
 这是一个javascript的全栈项目,参考网上的tutorial开发(https://codeburst.io/building-a-budget-manager-with-vue-js-and-node-js-part-i-f3d7311822a8)。
 原始项目有一些问题，可能会跑不通，在自己的项目里把这些东西都修复了。
 
+项目的主题是一个预算管理系统。用户登录之后，可以创建Client和Budget，并对这些资源进行修改、删除、查询的操作。
+
 技术栈: vue2.x + node.js(express) + mongodb + vuetify + passport.js
 
 1. client端的SPA是vue.js开发的；
